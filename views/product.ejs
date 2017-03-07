@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <head>
+        <meta charset="utf-8">
+        <title><%= title %></title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Node WebStore</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/products">Products <span class="sr-only">(current)</span></a></li>
+            <% if (user !== undefined) { %>
+            <li><a href="/products/new">Add Product</a></li>
+            <% } %>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+          <% if (user !== undefined) { %>
+            <li><a href="#">Usuario: <%= user.username %></a></li>
+            <li><a href="/logout">Log Out</a></li>
+          <% } else { %>
+            <li><a href="/register">Sign Up</a></li>
+            <li><a href="/login">Log In</a></li>
+          <% } %>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%= product.name %></h3>
+        </div>
+        <div class="panel-body">
+          <p><%= product.description %></p>
+          <p>$<%= product.price %></p><br>
+          <p>By:&nbsp;<span class="author"><%= product.author.username %></a></p>
+        </div>
+
+        <!-- Comments -->
+        <ul class="list-group">
+        <div id="comments">
+          <% for (var i = 0; i < product.comments.length; i++) { %>
+            <li class="list-group-item" data-comment-id="<%= product.comments[i]._id %>">
+                <div class="comment">
+                  <span class="author"><%= product.comments[i].author.username %></span>&nbsp;says:&nbsp;<span class="comment-body"><%= product.comments[i].body %></span>
+                </div>
+                <% if (user !== undefined && String(product.comments[i].author._id) == String(user._id)) { %>
+                <div class="text-right">
+                  <button type="button" class="btn btn-xs btn-danger remove-comment" aria-label="Remove comment" data-product-id="<%= product._id %>" data-comment-id="<%= product.comments[i]._id %>">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                  </button>
+                  <button type="button" class="btn btn-xs btn-primary update-comment" aria-label="Update comment" data-product-id="<%= product._id %> "data-comment-id="<%= product.comments[i]._id %>">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                  </button>
+                </div>
+                <% } %>
+            
+            </li>
+            <% } %>
+          </div>
+          <!-- Display new comment form if user is logged in-->
+          <% if (user !== undefined) { %>
+            <li class="list-group-item">
+              <form action="/products/<%= product._id %>/comments" method="POST">
+                <div class="row">
+                  <div class="form-group col-xs-12">
+                    <textarea class="form-control" rows="3" id="body" name="body" placeholder="Post your comment here..."></textarea>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-xs-12">
+                    <button type="button" class="btn btn-success" aria-label="Post comment" id="post-comment" data-product-id="<%= product._id %>">
+                      Post comment&nbsp;
+                      <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </li>
+          <% } %>
+        </ul>
+        <% if (user !== undefined && String(product.author._id) == String(user._id)) { %>
+        <div class="panel-footer text-right">
+          <button type="button" class="btn btn-danger" aria-label="Remove" id="remove" data-product-id="<%= product._id %>">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          </button>
+          <a href="/products/<%= product._id %>/edit" type="button" class="btn btn-primary" aria-label="Edit" id="edit">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+          </a>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script src="/javascripts/product.js"></script>
+  </body>
+</html>

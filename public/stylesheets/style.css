@@ -1,0 +1,23 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.author {
+  font-weight: bold;
+}
+
+.comment-body {
+  font-style: italic;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+#update-comment-cancel,
+#update-comment-done {
+  margin-top: 10px;
+}
